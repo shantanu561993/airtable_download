@@ -23,6 +23,7 @@ version = "0.1.0"
 dependencies = [
  "csv",
  "reqwest",
+ "static_vcruntime",
 ]
 
 [[package]]
@@ -750,6 +751,12 @@ dependencies = [
  "libc",
  "windows-sys",
 ]
+
+[[package]]
+name = "static_vcruntime"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "954e3e877803def9dc46075bf4060147c55cd70db97873077232eae0269dc89b"
 
 [[package]]
 name = "syn"
