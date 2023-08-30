@@ -1,12 +1,16 @@
 use std::fs;
 use csv::Reader;
 use std::path::PathBuf;
+use std::env;
+
 
 fn main() {
     let files = get_csv_files_in_current_folder();
+    let document_column = get_document_column();
+
 
     for file in files {
-        if let Some(values) = process_csv_file(&file) {
+        if let Some(values) = process_csv_file(&file, &document_column) {
             // Perform further operations with the extracted non-empty values
             // println!("{:?}", values);
             for value in values {
@@ -59,7 +63,15 @@ fn get_csv_files_in_current_folder() -> Vec<PathBuf> {
     csv_files
 }
 
-fn process_csv_file(file_path: &PathBuf) -> Option<Vec<String>> {
+fn get_document_column() -> String {
+    match env::args().nth(1) {
+        Some(column) => column,
+        None => String::from("Document available"),
+    }
+}
+
+
+fn process_csv_file(file_path: &PathBuf, document_column: &str) -> Option<Vec<String>> {
     let file = fs::File::open(file_path)
         .expect("Failed to open CSV file.");
 
@@ -68,7 +80,7 @@ fn process_csv_file(file_path: &PathBuf) -> Option<Vec<String>> {
     let headers = csv_reader.headers()
         .expect("Failed to read CSV headers.");
 
-    let document_idx = headers.iter().position(|header| header == "Document available");
+    let document_idx = headers.iter().position(|header| header == document_column);
 
     if let Some(idx) = document_idx {
         let values: Vec<String> = csv_reader.records()
